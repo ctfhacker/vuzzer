@@ -506,8 +506,12 @@ def prepareBBOffsets():
     tempFull=set()
     tempByte=set()
     for i in range(config.LIBNUM):
-        pFD=open(config.LIBPICKLE[i],"r")
-        tBB=pickle.load(pFD)
+         #pFD=open(config.LIBPICKLE[i],"r")
+
+        with open(config.LIBPICKLE[i], "rb") as f:
+            tBB = pickle.loads(f.read())
+
+        # tBB=pickle.load(pFD)
         for tb in tBB:
             ad=tb+int(config.LIBOFFSETS[i],0)
             # we do not consider weights greater than BBMAXWEIGHT and we take log2 of weights as final weight.
@@ -518,9 +522,14 @@ def prepareBBOffsets():
             if i==0:
                 config.cAPPBB.add(ad)
             config.cALLBB.add(ad)
-        pFD.close()
-        tFD=open(config.NAMESPICKLE[i],"r")
-        tdata=pickle.load(tFD)
+
+        # pFD.close()
+        print(config.NAMESPICKLE)
+        # tFD=open(config.NAMESPICKLE[i],"r")
+        with open(config.NAMESPICKLE[i], "rb") as f:
+            tdata = pickle.loads(f.read())
+
+        # tdata=pickle.load()
         tempFull.update(tdata[0])# set of full strings from the binary
         tempByte.update(tdata[1])# set of individual bytes from the binary
     if config.NOFFBYTES == True:
